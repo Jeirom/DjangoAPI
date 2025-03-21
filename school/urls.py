@@ -2,13 +2,14 @@ from school.apps import SchoolConfig
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 from school.views import (CourseViewSet, LessonListAPIView, LessonCreateAPIView,
-                          LessonDestroyAPIView, LessonRetrieveAPIView, LessonUpdateAPIView)
+                          LessonDestroyAPIView, LessonRetrieveAPIView, LessonUpdateAPIView, PaymentViewSet)
 
 
 app_name = SchoolConfig.name
 
 router = SimpleRouter()
 router.register('', CourseViewSet)
+# router.register('payment/', PaymentViewSet)
 
 
 urlpatterns = [
