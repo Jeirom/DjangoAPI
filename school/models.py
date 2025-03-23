@@ -15,7 +15,7 @@ class Course(models.Model):
     name: str = models.CharField(max_length=30, verbose_name='Курс')
     preview: models.ImageField = models.ImageField()
     description: str = models.TextField(max_length=100)
-
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Владелец')
 
 class Lesson(models.Model):
     """
@@ -33,6 +33,7 @@ class Lesson(models.Model):
     preview: models.ImageField = models.ImageField()
     video: str = models.TextField(verbose_name='Ссылка на видео')
     course: Course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Урок из курса", related_name='course')
+    owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Владелец')
 
 
 class Payment(models.Model):
