@@ -6,7 +6,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **kwargs):
         # Пример добавления одного объекта
-        my_instance = User( email='test@gmail.com', is_active=True)
+        my_instance = User(email='test3@gmail.com', is_active=True, password='1234qwertyu')
         my_instance.save()
         self.stdout.write(self.style.SUCCESS('Данные успешно добавлены!'))
 

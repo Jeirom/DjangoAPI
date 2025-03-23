@@ -8,7 +8,7 @@ class User(AbstractUser):
     avatar = models.ImageField(upload_to='users/', blank=True, null=True, verbose_name='Аватар',)
     phone = models.CharField(max_length=11, blank=True, null=True, verbose_name='Номер телефона',)
     country = models.CharField(max_length=50, blank=True, null=True, verbose_name='Страна')
-    token = models.CharField(max_length=100, verbose_name='Токен', blank=True, null=True)
+    token = models.CharField(max_length=150, verbose_name='Токен', blank=True, null=True)
     is_active = models.BooleanField()
 
     USERNAME_FIELD = 'email'

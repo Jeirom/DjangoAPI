@@ -32,7 +32,7 @@ class Lesson(models.Model):
     description: str = models.TextField(verbose_name='Описание урока')
     preview: models.ImageField = models.ImageField()
     video: str = models.TextField(verbose_name='Ссылка на видео')
-    course: Course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Урок из курса")
+    course: Course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Урок из курса", related_name='course')
 
 
 class Payment(models.Model):
