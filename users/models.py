@@ -9,7 +9,7 @@ class User(AbstractUser):
     phone = models.CharField(max_length=11, blank=True, null=True, verbose_name='Номер телефона',)
     country = models.CharField(max_length=50, blank=True, null=True, verbose_name='Страна')
     token = models.CharField(max_length=150, verbose_name='Токен', blank=True, null=True)
-    is_active = models.BooleanField()
+    is_active = models.BooleanField(blank=True, null=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []

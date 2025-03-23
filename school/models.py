@@ -30,7 +30,7 @@ class Lesson(models.Model):
     """
     name: str = models.CharField(max_length=100, verbose_name='Урок')
     description: str = models.TextField(verbose_name='Описание урока')
-    preview: models.ImageField = models.ImageField()
+    preview: models.ImageField = models.ImageField(blank=True, null=True)
     video: str = models.TextField(verbose_name='Ссылка на видео')
     course: Course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Урок из курса", related_name='course')
     owner = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, verbose_name='Владелец')
