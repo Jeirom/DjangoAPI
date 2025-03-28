@@ -24,6 +24,14 @@ class CourseViewSet(ModelViewSet):
         lesson.owner = self.request.user
         lesson.save()
 
+    def get_permissions(self):
+        if self.action == 'create':
+            self.permission_classes = (~IsModer,)
+        elif self.action in ['update', 'retrieve']:
+            self.permission_classes = (IsModer | IsOwner,)
+        elif self.action == 'destroy':
+            self.permission_classes = (IsOwner | ~IsModer,)
+        return super().get_permissions()
 
 
 class LessonCreateAPIView(CreateAPIView):
