@@ -62,3 +62,9 @@ class Payment(models.Model):
 
     def __str__(self) -> str:
         return f"Payment by {self.user} for {self.paid_course} on {self.payment_date.strftime('%Y-%m-%d')}"
+
+
+class Subscription(models.Model):
+    user: User = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_sub')
+    course: Course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Подписка на курс",
+                                       related_name='user_course')
