@@ -6,6 +6,7 @@ from school.models import Course, Lesson, Payment
 from school.serializer import CourseSerializer, LessonSerializer, CourseDetailSerializer, PaymentSerializer
 from rest_framework import filters
 
+from school.validators import validate_forbidden_words
 from users.permissions import IsModer, IsOwner
 
 
@@ -13,6 +14,7 @@ class CourseViewSet(ModelViewSet):
 
     queryset = Course.objects.all()
     permission_classes = [~IsModer, IsAuthenticated,]
+    validators = [validate_forbidden_words]
 
     def get_serializer_class(self):
         if self.action == 'retrieve':
@@ -37,6 +39,7 @@ class CourseViewSet(ModelViewSet):
 class LessonCreateAPIView(CreateAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+    validators = [validate_forbidden_words]
 
     def perform_create(self, serializer):
         lesson = serializer.save()
