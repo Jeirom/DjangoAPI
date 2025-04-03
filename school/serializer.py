@@ -40,3 +40,10 @@ class SubscriptionSerializer(ModelSerializer):
     class Meta:
         model = Subscription
         fields = '__all__'
+
+
+
+class PaymentSerializer(ModelSerializer):
+    class Meta:
+        model = Payment
+        fields = "__all__"

@@ -1,4 +1,5 @@
 from django.shortcuts import render, get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -11,6 +12,7 @@ from rest_framework import filters
 
 from school.validators import validate_forbidden_words
 from users.permissions import IsModer, IsOwner
+from users.services import create_stripe_session, create_stripe_price
 
 
 class CourseViewSet(ModelViewSet):
@@ -114,3 +116,55 @@ class SubscriptionAPIView(APIView):
 class SubscriptionListAPIView(ListAPIView):
     serializer_class = SubscriptionSerializer
     queryset = Subscription.objects.all()
+
+
+class PaymentCreateAPIView(CreateAPIView):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+    permission_classes = [IsAuthenticated, ~IsModer]
+
+    # def create(self, request, *args, **kwargs):
+    #     serializer = self.get_serializer(data=request.data)
+    #     serializer.is_valid(raise_exception=True)
+    #
+    #     if not request.user.is_authenticated:
+    #         return Response(
+    #             {"error": "Authentication credentials were not provided."},
+    #             status=status.HTTP_401_UNAUTHORIZED
+    #         )
+    #
+    #     self.perform_create(serializer)
+    #     headers = self.get_success_headers(serializer.data)
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        payment = serializer.save(user=self.request.user)
+        product = payment.course.name if payment.course else payment.lesson.name
+        price = create_stripe_price(payment.payment_sum, product)
+        session_id, payment_link = create_stripe_session(price)
+        payment.session_id = session_id
+        payment.link = payment_link
+        payment.save()
+
+
+class PaymentRetrieveAPIView(RetrieveAPIView):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+
+
+class PaymentListAPIView(ListAPIView):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+    filter_backends = [DjangoFilterBackend,]
+    filterset_fields = ("course_paid", "lesson_paid", "payment_method")
+    ordering_fields = ("date_of_payment",)
+
+
+class PaymentUpdateAPIView(UpdateAPIView):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+
+
+class PaymentDestroyAPIView(DestroyAPIView):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer

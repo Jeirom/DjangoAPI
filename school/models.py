@@ -55,10 +55,14 @@ class Payment(models.Model):
 
     user: User = models.ForeignKey(User, on_delete=models.CASCADE, related_name='payments')
     payment_date: models.DateTimeField = models.DateTimeField(auto_now_add=False, blank=True, null=True)
-    paid_course: Course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='payments')
-    paid_lesson: Lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='payments')
+    course: Course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='payments')
+    lesson: Lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='payments')
     amount: models.DecimalField = models.DecimalField(max_digits=10, decimal_places=2)
     payment_method: Literal['cash', 'transfer'] = models.CharField(max_length=10, choices=PAYMENT_METHODS)
+    payment_sum = models.PositiveIntegerField(verbose_name="Сумма оплаты", blank=True, null=True)
+    session_id = models.CharField(blank=True, null=True)
+    link = models.CharField(blank=True, null=True)
+
 
     def __str__(self) -> str:
         return f"Payment by {self.user} for {self.paid_course} on {self.payment_date.strftime('%Y-%m-%d')}"

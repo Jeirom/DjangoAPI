@@ -28,6 +28,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'rest_framework_simplejwt',
+    'drf_yasg',
+    'corsheaders',
 
     'users',
     'school',
@@ -41,6 +43,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -178,3 +181,15 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
+
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:8000',  # Замените на адрес вашего фронтенд-сервера
+]
+
+CORS_ALLOW_ALL_ORIGINS = False
+
+STRIPE_TEST_SECRET_KEY = 'pk_test_51R9MkwGy0GRCZ92lCAqSU4hqqoeSqwuetbMDG7D1Rbu0uHogY0md267PjUN8N90KU2H9Ir62QFFv4ug7c1hXwYia00vnvZG7Cn'
+# STRIPE_TEST_PUBLIC_KEY = os.getenv('STRIPE_TEST_PUBLIC_KEY', 'ваш_тест_публичный_ключ')
+# STRIPE_TEST_SECRET_KEY = os.getenv('STRIPE_TEST_SECRET_KEY', 'pk_test_51R9MkwGy0GRCZ92lCAqSU4hqqoeSqwuetbMDG7D1Rbu0uHogY0md267PjUN8N90KU2H9Ir62QFFv4ug7c1hXwYia00vnvZG7Cn')
+# STRIPE_LIVE_PUBLIC_KEY = os.getenv('STRIPE_LIVE_PUBLIC_KEY', 'ваш_публичный_ключ_для_продакшена')
+# STRIPE_LIVE_SECRET_KEY = os.getenv('STRIPE_LIVE_SECRET_KEY', 'ваш_секретный_ключ_для_продакшена')
