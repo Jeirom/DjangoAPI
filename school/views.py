@@ -12,7 +12,7 @@ from rest_framework import filters
 
 from school.validators import validate_forbidden_words
 from users.permissions import IsModer, IsOwner
-from users.services import create_stripe_session, create_stripe_price
+from users.services import create_stripe_session, create_stripe_price, create_stripe_product
 
 
 class CourseViewSet(ModelViewSet):
@@ -138,12 +138,16 @@ class PaymentCreateAPIView(CreateAPIView):
     #     return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     def perform_create(self, serializer):
-        payment = serializer.save(user=self.request.user)
-        product = payment.course.name if payment.course else payment.lesson.name
-        price = create_stripe_price(payment.payment_sum, product)
-        session_id, payment_link = create_stripe_session(price)
+        payment = serializer.save()
+        payment.user = self.request.user
+        stripe_product_id = create_stripe_product(payment)
+        payment.amount = payment.payment_sum
+        price = create_stripe_price(
+            stripe_product_id=stripe_product_id, amount=payment.amount
+        )
+        session_id, payment_link = create_stripe_session(price=price)
         payment.session_id = session_id
-        payment.link = payment_link
+        payment.payment_url = payment_link
         payment.save()
 
 
