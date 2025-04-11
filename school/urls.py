@@ -2,7 +2,8 @@ from school.apps import SchoolConfig
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 from school.views import (CourseViewSet, LessonListAPIView, LessonCreateAPIView,
-                          LessonDestroyAPIView, LessonRetrieveAPIView, LessonUpdateAPIView, PaymentViewSet)
+                          LessonDestroyAPIView, LessonRetrieveAPIView, LessonUpdateAPIView, PaymentViewSet,
+                          SubscriptionCreateAPIView)
 
 
 app_name = SchoolConfig.name
@@ -18,6 +19,7 @@ urlpatterns = [
     path('lesson/<int:pk>/delete', LessonDestroyAPIView.as_view(), name='delete'),
     path('lesson/<int:pk>/update', LessonUpdateAPIView.as_view(), name='update'),
     path('lesson/<int:pk>/', LessonRetrieveAPIView.as_view(), name='detail'),
+    path('subscription/create/', SubscriptionCreateAPIView.as_view(), name='course_subscription'),
 
 ]
 urlpatterns += router.urls
